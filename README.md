@@ -4,7 +4,8 @@
 
 Copy Dockerfile, docker-compose.yml and docker-entrypoint.sh
 
-`# Dockerfile
+```
+# Dockerfile
 
 FROM ruby:2.7
 
@@ -29,9 +30,11 @@ RUN gem install bundler:'~> 2.1.4'
 
 RUN bundle
 
-CMD ./docker-entrypoint.sh`
+CMD ./docker-entrypoint.sh
+```
 
-`# docker-compose.yml
+```
+# docker-compose.yml
 
 version: '3.2'
 
@@ -61,17 +64,21 @@ services:
     volumes:
       - .:/usr/src/app
     depends_on:
-      - db`
+      - db
+```
 
 docker-entrypoint.sh
 
-`#!/bin/sh
+```
+#!/bin/sh
 
 rm -f tmp/pids/server.pid
-bin/rails server -b 0.0.0.0`
+bin/rails server -b 0.0.0.0
+```
 
 Then get ownership
-`sudo chown -R $USER:$USER .
+```
+sudo chown -R $USER:$USER .
 
 chmod u+x docker-entrypoint.sh
 
@@ -79,12 +86,15 @@ docker build -t rails6 .
 
 docker-compose build
 
-docker-compose run --rm web bundle exec rake webpacker:install`
+docker-compose run --rm web bundle exec rake webpacker:install
+```
 
 ...And finally to check that everything has worked as intended:
 
-`docker-compose up -d db
-docker-compose up web`
+```
+docker-compose up -d db
+docker-compose up web
+```
 
   > web_1  | => Booting Puma
   > ...
@@ -92,7 +102,8 @@ docker-compose up web`
 
 Now update your docker-compose.yml for auto-reloading
 
-`# docker-compose.yml
+```
+# docker-compose.yml
 
 version: '3.2'
 
@@ -136,18 +147,27 @@ services:
     environment:
       NODE_ENV: development
       RAILS_ENV: development
-      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0`
+      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+      ```
 
 You should be good! Check localhost:3000. Everytime I run a scaffold or something it is set to root so I have to 
 
-`sudo chown -R $USER:$USER .`
+```
+sudo chown -R $USER:$USER .
+```
 
 To start a new project clone this repo
 
-To enter the container - `docker exec -it rubygems_web_1 /bin/bash`
+To enter the container - 
+
+```
+docker exec -it rubygems_web_1 /bin/bash
+```
 
 update node and add npm 
 
-`curl -sL https://deb.nodesource.com/setup_14.x | bash
+```
+curl -sL https://deb.nodesource.com/setup_14.x | bash
 
-sudo apt-get install -y nodejs`
+sudo apt-get install -y nodejs
+```
