@@ -96,9 +96,9 @@ docker-compose up -d db
 docker-compose up web
 ```
 
-  > web_1  | => Booting Puma
-  > ...
-  > web_1  | Use Ctrl-C to stop
+web_1  | => Booting Puma
+...
+web_1  | Use Ctrl-C to stop
 
 Now update your docker-compose.yml for auto-reloading
 
@@ -148,7 +148,7 @@ services:
       NODE_ENV: development
       RAILS_ENV: development
       WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
-      ```
+```
 
 You should be good! Check localhost:3000. Everytime I run a scaffold or something it is set to root so I have to 
 
