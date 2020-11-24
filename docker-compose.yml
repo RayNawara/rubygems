@@ -1,0 +1,45 @@
+# docker-compose.yml
+
+version: '3.2'
+
+volumes:
+  dbdata:
+    driver: local
+
+services:
+  db:
+    image: postgres:11
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_USER=rails
+      - POSTGRES_PASSWORD=secret123
+    volumes:
+      - dbdata:/var/lib/postgresql/data/pgdata
+
+  web:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      RAILS_ENV: development
+      RACK_ENV: development
+      POSTGRES_USER: rails
+      POSTGRES_PASSWORD: secret123
+      WEBPACKER_DEV_SERVER_HOST: webpack_dev_server
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - db
+      - webpack
+
+  webpack:
+    build: .
+    command: ./bin/webpack-dev-server
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - '3035:3035'
+    environment:
+      NODE_ENV: development
+      RAILS_ENV: development
+      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
